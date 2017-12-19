@@ -13,8 +13,9 @@ EVAL_INTERVAL_SRCS = 10
 
 def evaluate(mnist):
     with tf.Graph().as_default() as g:
+        validate_imgs = mnist.validation.images
         x = tf.placeholder(dtype=tf.float32,
-                           shape=[mnist_train.BATCH_SIZE, mnist_inference.IMAGE_SIZE,
+                           shape=[validate_imgs.validation.num_examples, mnist_inference.IMAGE_SIZE,
                                   mnist_inference.IMAGE_SIZE, mnist_inference.NUM_CHANNELS],
                            name="x_input")
 
@@ -22,8 +23,7 @@ def evaluate(mnist):
                                 shape=[None, mnist_inference.OUTPUT_NODE],
                                 name="y_input")
 
-        validate_imgs = mnist.validation.images
-        imgs_faltten = np.reshape(validate_imgs, (mnist_train.BATCH_SIZE,
+        imgs_faltten = np.reshape(validate_imgs, (validate_imgs.validation.num_examples,
                                                   mnist_inference.IMAGE_SIZE,
                                                   mnist_inference.IMAGE_SIZE,
                                                   mnist_inference.NUM_CHANNELS))
