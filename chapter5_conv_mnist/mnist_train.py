@@ -16,6 +16,7 @@ MOVING_AVG_DEC = 0.99
 
 MODEL_SAVE_PATH = "/tmp/model_mnist"
 MODEL_NAME = "model_mnist.ckpt"
+MNIST_PATH = "/tmp/mnist/model-mnist"
 
 def train(mnist):
     x = tf.placeholder(
@@ -77,7 +78,7 @@ def train(mnist):
                            global_step=global_step)
 
 def main(argv=None):
-    mnist = input_data.read_data_sets("/tmp/mnist", one_hot=True)
+    mnist = input_data.read_data_sets(MNIST_PATH, one_hot=True)
     train(mnist)
 
 if __name__ == '__main__':

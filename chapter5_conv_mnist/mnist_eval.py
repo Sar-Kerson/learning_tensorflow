@@ -59,7 +59,7 @@ def evaluate(mnist):
 
 
 def main(argv=None):
-    mnist = input_data.read_data_sets("/tmp/mnist", one_hot=True)
+    mnist = input_data.read_data_sets(mnist_train.MNIST_PATH, one_hot=True)
     evaluate(mnist)
 
 if __name__ == '__main__':
