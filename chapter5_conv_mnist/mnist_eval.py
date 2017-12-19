@@ -23,15 +23,16 @@ def evaluate(mnist):
                                 shape=[None, mnist_inference.OUTPUT_NODE],
                                 name="y_input")
 
-        validate_imgs = mnist.validation.images
-        imgs_faltten = np.reshape(validate_imgs, (mnist.validation.num_examples,
-                                                  mnist_inference.IMAGE_SIZE,
-                                                  mnist_inference.IMAGE_SIZE,
-                                                  mnist_inference.NUM_CHANNELS))
-        validate_feed = {x: imgs_faltten,
-                         y_true: mnist.validation.labels}
+        xv, yv = mnist.validation.next_batch(mnist_train.BATCH_SIZE)
+        reshaped_xv = np.reshape(xv, (mnist_train.BATCH_SIZE,
+                                      mnist_inference.IMAGE_SIZE,
+                                      mnist_inference.IMAGE_SIZE,
+                                      mnist_inference.NUM_CHANNELS))
 
-        y = mnist_inference.inference(x, reuse=False, train=True, regularizer=None)
+        validate_feed = {x: reshaped_xv,
+                         y_true: yv}
+
+        y = mnist_inference.inference(x, reuse=False, train=False, regularizer=None)
 
 
         correct_prediction = tf.equal(tf.argmax(y, 1),
@@ -48,6 +49,7 @@ def evaluate(mnist):
                 # 自动寻找最新模型
                 ckpt = tf.train.get_checkpoint_state(mnist_train.MODEL_SAVE_PATH)
                 if ckpt and ckpt.model_checkpoint_path:
+                    saver.restore(sess, ckpt.model_checkpoint_path)
                     global_step = ckpt.model_checkpoint_path.split('/')[-1].split('-')[-1]
                     accuracy_score = sess.run(accuracy,
                                               feed_dict=validate_feed)
