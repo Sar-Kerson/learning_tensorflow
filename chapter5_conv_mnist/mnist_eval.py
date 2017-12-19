@@ -15,7 +15,7 @@ def evaluate(mnist):
     with tf.Graph().as_default() as g:
 
         x = tf.placeholder(dtype=tf.float32,
-                           shape=[mnist.validation.num_examples, mnist_inference.IMAGE_SIZE,
+                           shape=[mnist_train.BATCH_SIZE, mnist_inference.IMAGE_SIZE,
                                   mnist_inference.IMAGE_SIZE, mnist_inference.NUM_CHANNELS],
                            name="x_input")
 
