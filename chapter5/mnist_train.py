@@ -63,19 +63,33 @@ def train(mnist):
         with tf.Session() as sess:
             tf.global_variables_initializer().run()
 
+            writer = tf.summary.FileWriter(os.path.join(DATA, 'log'), tf.get_default_graph())
+
             for i in range(TRAINING_STEPS):
                 xs, ys = mnist.train.next_batch(BATCH_SIZE)
                 _, loss_value, step = sess.run([train_op, loss, global_step],
                                                feed_dict={x: xs, y_true: ys})
-
+                # add---2
                 if i % 1000 == 0:
+                    '''add---2'''
+                    run_option = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+                    run_metadata = tf.RunMetadata()
+                    _, loss_value, step = sess.run([train_op, global_step],
+                                                   feed_dict={x:xs, y_true: ys},
+                                                   options=run_option,
+                                                   run_metadata=run_metadata)
+                    writer.add_run_metadata(run_metadata, 'step%03d' % i)
                     print("After %d training steps, loss on training batch is %g."
                           % (step, loss_value))
 
+                else:
+                    _, loss_value, step = sess.run([train_op, global_step],
+                                                   feed_dict={x:xs, y_true: ys})
+                    '''add---2'''
+
                     # saver.save(sess, os.path.join(MODEL_SAVE_PATH, MODEL_NAME),
                     #            global_step=global_step)
-    writer = tf.summary.FileWriter(os.path.join(DATA, 'log'), tf.get_default_graph())
-    writer.close()
+            writer.close()
 
 def main(argv=None):
     mnist = input_data.read_data_sets(DATA, one_hot=True)
