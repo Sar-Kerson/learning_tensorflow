@@ -40,14 +40,14 @@ def train(mnist):
         variable_average = tf.train.ExponentialMovingAverage(MOVING_AVG_DEC, global_step)
         variable_average_op = variable_average.apply(tf.trainable_variables())
 
-    with tf.name_scope('loss func'):
+    with tf.name_scope('loss_func'):
         cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(
             labels=tf.argmax(y_true, 1),
             logits=y)
         cross_entropy_mean = tf.reduce_mean(cross_entropy)
         loss = cross_entropy_mean + tf.add_n(tf.get_collection("losses"))
 
-    with tf.name_scope('train step'):
+    with tf.name_scope('train_step'):
         learning_rate = tf.train.exponential_decay(
             learning_rate=LEARNING_RATE_BASE,
             global_step=global_step,
