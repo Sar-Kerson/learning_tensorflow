@@ -8,6 +8,7 @@ import mnist_inference
 import mnist_train
 
 
+
 # load the model every 10 sec, and test the accuracy on the test set
 EVAL_INTERVAL_SRCS = 10
 
