@@ -38,14 +38,14 @@ class Node:
     def __init__(self, url, dir, pwd):
         self.url = url
         self.dir = dir
-        self.pwd = dir
+        self.pwd = pwd
         self.known = set()
 
     def query(self, query, history=[]):
         try:
             return self._handle(query)
         except UnhandledQuery:
-            history += self.url
+            history = history + [self.url]
             if len(history) >= MAX_HISTORY_LENGTH: raise
             return self._broadcast(query, history)
 
@@ -69,6 +69,7 @@ class Node:
     def _handle(self, query):
         dir = self.dir
         file = join(dir, query)
+        print(file)
         if not isfile(file): raise UnhandledQuery
         if not inside(dir, file): raise AccessDenied
         return open(file).read()
