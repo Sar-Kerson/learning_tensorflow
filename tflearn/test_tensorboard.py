@@ -43,7 +43,7 @@ def nn_layer(input_tensor, input_dim, output_dim, layer_name, act=tf.nn.relu):
         return activations
 
 
-def main():
+if __name__ == '__main__':
     mnist = input_data.read_data_sets(DATASET, one_hot=True)
     with tf.name_scope('input'):
         x = tf.placeholder(tf.float32, [None, 784], name='x-input')
@@ -63,7 +63,6 @@ def main():
     with tf.name_scope('train'):
         train_step = tf.train.AdagradOptimizer(0.001).minimize(cross_entropy)
 
-
     # 计算正确率并生成监控日志
     with tf.name_scope('accuracy'):
         with tf.name_scope('correct_prediction'):
@@ -71,7 +70,6 @@ def main():
         with tf.name_scope('accuracy'):
             accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
         tf.summary.scalar('accuracy', accuracy)
-
 
     # merge_all 隐式调用了所有的summary，不用一一调用它们
     merged = tf.summary.merge_all()
@@ -82,17 +80,13 @@ def main():
         tf.global_variables_initializer().run()
 
         for i in range(TRAIN_STEPS):
-
             xs, ys = mnist.train.next_batch(BATCH_SIZE)
 
-            summary, _ = sess.run([merged, train_step], feed_dict={x:xs, y:ys})
+            summary, _ = sess.run([merged, train_step], feed_dict={x: xs, y: ys})
 
             writer.add_summary(summary, i)
 
     writer.close()
-
-if __name__ == '__main__':
-    tf.app.run()
 
 
 
