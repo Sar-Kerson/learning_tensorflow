@@ -33,7 +33,7 @@ def nn_layer(input_tensor, input_dim, output_dim, layer_name, act=tf.nn.relu):
             variable_summaries(biases, layer_name + '/biases')
 
         with tf.name_scope('Wx_plus_b'):
-            preactivate = tf.matmul(weights, input_tensor) + biases
+            preactivate = tf.matmul(input_tensor, weights) + biases
             # 记录激活前的分布
             tf.summary.histogram(layer_name + '/preactivations', preactivate)
 
