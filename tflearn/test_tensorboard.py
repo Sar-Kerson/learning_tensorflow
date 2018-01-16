@@ -84,6 +84,9 @@ if __name__ == '__main__':
 
             summary, _ = sess.run([merged, train_step], feed_dict={x: xs, y: ys})
 
+            if i % 1000 == 0:
+                print('this is step %d' % i)
+
             writer.add_summary(summary, i)
 
     writer.close()
