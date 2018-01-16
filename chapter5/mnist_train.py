@@ -74,11 +74,12 @@ def train(mnist):
                     '''add---2'''
                     run_option = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
                     run_metadata = tf.RunMetadata()
-                    _, loss_value, step = sess.run([train_op, global_step],
+                    loss_value, step = sess.run([train_op, global_step],
                                                    feed_dict={x:xs, y_true: ys},
                                                    options=run_option,
                                                    run_metadata=run_metadata)
                     writer.add_run_metadata(run_metadata, 'step%03d' % i)
+
                     print("After %d training steps, loss on training batch is %g."
                           % (step, loss_value))
 
